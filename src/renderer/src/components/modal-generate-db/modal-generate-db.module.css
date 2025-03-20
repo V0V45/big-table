@@ -1,0 +1,93 @@
+.modal {
+  position: absolute;
+  top: 33%;
+  left: 33%;
+  right: 33%;
+  bottom: 33%;
+  background-color: #454545;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  border-radius: 24px;
+  animation: modalPopup 0.2s ease-out;
+  padding: 16px;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  animation: overlayShowing 0.2s ease-out;
+}
+
+.h2 {
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-size: 20px;
+  margin-bottom: 24px;
+  color: #fff;
+}
+
+.input {
+  border: 1px solid #ff7e31;
+  border-radius: 8px;
+  width: 100%;
+  height: 25%;
+  padding: 4px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  color: #fff;
+  font-size: 24px;
+  text-align: center;
+  transition: background-color 0.3s ease-out;
+}
+
+.input:focus {
+  background-color: #ff7e31;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.buttons {
+  margin-top: auto;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+.generateButton {
+  margin-right: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes overlayShowing {
+  from {
+    background-color: rgba(255, 255, 255, 0);
+  }
+  to {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes modalPopup {
+  from {
+    transform: scale(0%);
+  }
+  to {
+    transform: scale(100%);
+  }
+}

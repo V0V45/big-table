@@ -1,0 +1,18 @@
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cleanButton {
+    margin: 0 24px 4px 24px;
+}
+
+.generateButton {
+    margin: 0 24px 4px 0;
+}

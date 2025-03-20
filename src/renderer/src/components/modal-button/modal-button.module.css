@@ -1,0 +1,48 @@
+.modalButton {
+  border-radius: 6px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 2px 4px;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-block;
+  font-family:
+    Inter,
+    -apple-system,
+    system-ui,
+    Roboto,
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
+  height: 40px;
+  line-height: 40px;
+  outline: 0;
+  overflow: hidden;
+  padding: 0 20px;
+  pointer-events: auto;
+  position: relative;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  vertical-align: top;
+  white-space: nowrap;
+  width: 100%;
+  z-index: 9;
+  border: 0;
+  transition: box-shadow 0.2s;
+}
+
+.redStyle {
+  background: linear-gradient(-180deg, #ff0000, #8b0000);
+}
+
+.greenStyle {
+  background: linear-gradient(-180deg, #00FF8C, #006E3C);
+}
+
+.bottomButton.greenStyle:hover {
+  box-shadow: rgba(0, 255, 140, 0.5) 0 3px 8px;
+}
+
+.bottomButton.redStyle:hover {
+  box-shadow: rgba(253, 0, 0, 0.5) 0 3px 8px;
+}
