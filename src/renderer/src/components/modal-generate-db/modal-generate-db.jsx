@@ -2,8 +2,14 @@ import classes from "./modal-generate-db.module.css";
 import Modal from "react-modal";
 import ModalButton from "../modal-button/modal-button";
 import { useState } from "react";
+import Loading from "../loading/loading";
 
-export default function ModalGenerateDb({ modalIsOpen, handleCloseModal, handleGenerate }) {
+export default function ModalGenerateDb({
+  modalIsOpen,
+  handleCloseModal,
+  handleGenerate,
+  isLoading
+}) {
   const [value, setValue] = useState("");
 
   function handleChange(event) {
@@ -22,16 +28,22 @@ export default function ModalGenerateDb({ modalIsOpen, handleCloseModal, handleG
       className={classes.modal}
       overlayClassName={classes.overlay}
     >
-      <h2 className={classes.h2}>Сколько строк сгенерировать?</h2>
-      <input type="number" className={classes.input} value={value} onChange={handleChange} />
-      <div className={classes.buttons}>
-        <ModalButton onClick={handleClick} className={classes.generateButton} greenStyle>
-          Сгенерировать
-        </ModalButton>
-        <ModalButton onClick={handleCloseModal} redStyle>
-          Отменить
-        </ModalButton>
-      </div>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <>
+          <h2 className={classes.h2}>Сколько строк сгенерировать?</h2>
+          <input type="number" className={classes.input} value={value} onChange={handleChange} />
+          <div className={classes.buttons}>
+            <ModalButton onClick={handleClick} className={classes.generateButton} greenStyle>
+              Сгенерировать
+            </ModalButton>
+            <ModalButton onClick={handleCloseModal} redStyle>
+              Отменить
+            </ModalButton>
+          </div>
+        </>
+      )}
     </Modal>
   );
 }
