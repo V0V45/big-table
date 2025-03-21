@@ -14,37 +14,52 @@ function connectAndGetPool() {
   });
 }
 
-function generateData(pool, rowsNumber) {
+async function generateData(pool, rowsNumber) {
+  const queries = [];
   for (let i = 0; i < rowsNumber; i++) {
     const name = generateString(10);
     const description = generateString(20);
     const age = generateAge(100);
-    pool.query(`INSERT INTO data_example (name, description, age) VALUES ($1, $2, $3)`, [
-      name,
-      description,
-      age
-    ]);
+    queries.push(
+      pool.query(`INSERT INTO data_example (name, description, age) VALUES ($1, $2, $3)`, [
+        name,
+        description,
+        age
+      ])
+    );
   }
+  await Promise.all(queries);
 }
 
 process.parentPort.on("message", (message) => {
   switch (message.data.type) {
     case "start-connection":
-      process.parentPort.postMessage(`checking env: ${process.env.VITE_DB_USER}`);
       pool = connectAndGetPool();
       pool.query("SELECT NOW()", (err, res) => {
-        if (err) process.parentPort.postMessage(`errorFromDb: ${err}`);
-        else process.parentPort.postMessage(`connected to db at ${res.rows[0].now}`);
+        if (err) process.parentPort.postMessage({ type: "db-error", error: err });
+        else
+          process.parentPort.postMessage({
+            type: "db-connection-success",
+            info: `connected to db at ${res.rows[0].now}`
+          });
       });
       break;
     case "generate-data":
-      generateData(pool, message.data.number);
-      process.parentPort.postMessage(`data generated. rows: ${message.data.number}`);
+      generateData(pool, message.data.number).then(() => {
+        process.parentPort.postMessage({ type: "db-generate-success", info: "data generated" });
+      });
       break;
     case "clear-data":
-      pool.query("TRUNCATE data_example", (err) => {
-        if (err) process.parentPort.postMessage(`errorFromDb: ${err}`);
-        else process.parentPort.postMessage(`data cleared`);
+      pool.query("TRUNCATE data_example RESTART IDENTITY", (err) => {
+        if (err) process.parentPort.postMessage({ type: "db-error", error: err });
+        else process.parentPort.postMessage({ type: "db-clear-success", info: "data cleared" });
       });
+      break;
+    case "get-data":
+      pool.query("SELECT * FROM data_example ORDER BY id", (err, res) => {
+        if (err) process.parentPort.postMessage({ type: "db-error", error: err });
+        else process.parentPort.postMessage({ type: "db-get-data", data: res.rows });
+      });
+      break;
   }
 });
