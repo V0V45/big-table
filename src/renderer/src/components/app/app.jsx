@@ -5,17 +5,20 @@ import classes from "./app.module.css";
 import { useState, useEffect } from "react";
 import { Column, Table, AutoSizer } from "react-virtualized";
 
+// Основной компонент приложения
 export default function App() {
-  const emptyData = [{ id: null, name: null, description: "Data is empty", age: null }];
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState(emptyData);
-  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false);
-  const [generateModalIsOpen, setGenerateModalIsOpen] = useState(false);
+  const emptyData = [{ id: null, name: null, description: "Data is empty", age: null }]; // заглушка для пустых данных
+  const [isLoading, setIsLoading] = useState(false); // во время загрузки отображаем песочные часы
+  const [data, setData] = useState(emptyData); // данные из базы
+  const [deleteModalIsOpen, setDeleteModalIsOpen] = useState(false); // состояние модального окна очистки базы
+  const [generateModalIsOpen, setGenerateModalIsOpen] = useState(false); // состояние модального окна генерации данных
 
+  // первоначальная загрузка данных из базы
   useEffect(() => {
     getData();
   }, []);
 
+  // получение данных из базы
   async function getData() {
     setIsLoading(true);
     try {
@@ -30,6 +33,7 @@ export default function App() {
     }
   }
 
+  // очистка данных из базы
   async function handleClean() {
     setIsLoading(true);
     try {
@@ -41,6 +45,7 @@ export default function App() {
     }
   }
 
+  // генерация данных
   async function handleGenerate(number) {
     setIsLoading(true);
     try {

@@ -3,6 +3,7 @@ import classes from "./modal-delete-db.module.css";
 import Modal from "react-modal";
 import Loading from "../loading/loading";
 
+// Компонент модального окна очистки базы
 export default function ModalDeleteDb({ modalIsOpen, handleCloseModal, handleClean, isLoading }) {
   return (
     <Modal

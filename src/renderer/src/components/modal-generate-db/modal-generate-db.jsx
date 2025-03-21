@@ -4,6 +4,7 @@ import ModalButton from "../modal-button/modal-button";
 import { useState } from "react";
 import Loading from "../loading/loading";
 
+// Компонент модального окна генерации базы данных
 export default function ModalGenerateDb({
   modalIsOpen,
   handleCloseModal,

@@ -13,26 +13,27 @@ function createWindow() {
     height: 670,
     minWidth: 860,
     minHeight: 610,
-    show: false,
-    autoHideMenuBar: true,
+    show: false, // изначально скрываем окно
+    autoHideMenuBar: true, // скрыть строку меню
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
-      sandbox: false
+      sandbox: false // для получения доступа к Node.js API
     }
   });
 
+  // Открытие окна
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
   });
 
+  // Все веб-ссылки открываются во внешнем браузере
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
     return { action: "deny" };
   });
 
-  // HMR for renderer base on electron-vite cli.
-  // Load the remote URL for development or the local html file for production.
+  // Включает возможность Hot Reload в режиме run dev и отключает ее в production-коде
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
     mainWindow.loadURL(process.env["ELECTRON_RENDERER_URL"]);
   } else {
@@ -58,17 +59,17 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  // Set app user model id for windows
+  // Устанавливает App User Model ID на ОС Windows
   electronApp.setAppUserModelId("com.electron");
 
-  // Default open or close DevTools by F12 in development
-  // and ignore CommandOrControl + R in production.
-  // see https://github.com/alex8088/electron-toolkit/tree/master/packages/utils
+  // Дает возможность открыть DevTools в режиме run dev, и отключает эту возможность в production-коде
+  // Также игнорирует Command+R (или Ctrl+R) в production-коде
   app.on("browser-window-created", (_, window) => {
     optimizer.watchWindowShortcuts(window);
   });
 
   // IPC-обработчики
+  // Очищает данные с базы данных
   ipcMain.handle("clear-data", async () => {
     return new Promise((resolve, reject) => {
       db.postMessage({ type: "clear-data" });
@@ -88,6 +89,7 @@ app.whenReady().then(() => {
       db.on("message", messageHandler);
     });
   });
+  // Генерирует данные в базу данных
   ipcMain.handle("generate-data", async (event, number) => {
     return new Promise((resolve, reject) => {
       db.postMessage({ type: "generate-data", number });
@@ -107,6 +109,7 @@ app.whenReady().then(() => {
       db.on("message", messageHandler);
     });
   });
+  // Получает все данные из базы данных
   ipcMain.handle("get-data", async () => {
     return new Promise((resolve, reject) => {
       db.postMessage({ type: "get-data" });
@@ -132,20 +135,16 @@ app.whenReady().then(() => {
   createWindow();
 
   app.on("activate", function () {
-    // On macOS it's common to re-create a window in the app when the
-    // dock icon is clicked and there are no other windows open.
+    // На macOS если приложение еще работает, но все окна уже были закрыты,
+    // то создается новое окно
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
-// Quit when all windows are closed, except on macOS. There, it's common
-// for applications and their menu bar to stay active until the user quits
-// explicitly with Cmd + Q.
+// Если все окна закрываются, то приложение завершает свою работу
+// Но на macOS приложение остается работать в фоне, пока не будет закрыто через Command+Q
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") {
     app.quit();
   }
 });
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.

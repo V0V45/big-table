@@ -1,3 +1,4 @@
+// Глобальный файл React-приложения
 import "./assets/global.css";
 import "react-virtualized/styles.css";
 import React from "react";

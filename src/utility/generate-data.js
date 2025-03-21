@@ -1,3 +1,4 @@
+// Маленькая библиотека для генерации данных
 function generateString(length) {
   const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   let result = "";

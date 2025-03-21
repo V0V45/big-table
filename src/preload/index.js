@@ -1,17 +1,14 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
 
-// Custom APIs for renderer
+// Отдельное api для связки renderer и main
 const api = {
-  // Из браузера в main
   generateData: (number) => ipcRenderer.invoke("generate-data", number),
   clearData: () => ipcRenderer.invoke("clear-data"),
   getData: () => ipcRenderer.invoke("get-data")
 };
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
+// Проверка для contextIsolated
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld("electron", electronAPI);
